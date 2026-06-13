@@ -1,19 +1,3 @@
-# from pypdf import PdfReader
-# import pyttsx3
-
-# reader = PdfReader("Osho.pdf")
-
-# text = ""
-# for page in reader.pages:
-#     text += page.extract_text() or ""
-
-# engine = pyttsx3.init()
-# engine.save_to_file(text, "audiobook.mp3")
-# engine.runAndWait()
-
-# print("Audiobook Created!")
-
-
 import streamlit as st
 from pypdf import PdfReader
 from gtts import gTTS
@@ -33,7 +17,7 @@ def extract_text(pdf_file):
 # ---------------------------
 # Convert text to MP3
 # ---------------------------
-def text_to_audio(text, filename="output.mp3"):
+def text_to_audio(text, filename="audio_output.mp3"):
     tts = gTTS(text=text, lang="en")
     tts.save(filename)
     return filename
@@ -41,7 +25,7 @@ def text_to_audio(text, filename="output.mp3"):
 # ---------------------------
 # Download helper
 # ---------------------------
-def get_binary_file_downloader_html(file_path, file_label="File"):
+def get_binary_file_downloader(file_path, file_label="File"):
     with open(file_path, "rb") as f:
         data = f.read()
     b64 = base64.b64encode(data).decode()
@@ -54,7 +38,7 @@ def get_binary_file_downloader_html(file_path, file_label="File"):
 st.title("📄➡️🔊 PDF to MP3 Converter")
 st.write("Upload a PDF file and convert it into an audiobook.")
 
-pdf_file = st.file_uploader("Upload your PDF", type=["pdf"])
+pdf_file = st.file_uploader("Upload your PDF file", type=["pdf"])
 
 if pdf_file is not None:
     st.success("PDF uploaded successfully!")
@@ -74,6 +58,6 @@ if pdf_file is not None:
             st.audio(audio_file)
 
             st.markdown(
-                get_binary_file_downloader_html(audio_file, "Audiobook"),
+                get_binary_file_downloader(audio_file, "Audiobook"),
                 unsafe_allow_html=True
             )
